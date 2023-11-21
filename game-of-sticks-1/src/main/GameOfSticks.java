@@ -7,7 +7,7 @@ public class GameOfSticks {
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Game of Sticks! \n");
-		playerVSPlayer();
+		AIVSPlayer();
 	}
 	
 	static void playerVSPlayer() {
@@ -35,10 +35,11 @@ public class GameOfSticks {
 		numSticks = invalidNumSticks(numSticks, scan);
 		
 
-		for (int i=0; i<numSticks; i++) { //filling in
+		for (int i=0; i<numSticks; i++) { //filling in initial outer level ArrayList
 			computerHats.add(new ArrayList<Integer>());
 		}
-		for (int i=0; i<numSticks; i++) { //populating initial balls
+		
+		for (int i=0; i<numSticks; i++) { //populating initial balls in inner ArrayList
 			computerHats.get(i).add(1);
 			computerHats.get(i).add(2);
 			computerHats.get(i).add(3);
@@ -54,16 +55,16 @@ public class GameOfSticks {
 			}
 			else {
 				int compNumIndices = computerHats.get(numSticks-1).size();
-				int AIResponse = computerHats.get(numSticks-1).get((int) (Math.random()*compNumIndices) - 1);
+				int AIResponse = computerHats.get(numSticks-1).get((int) (Math.random()*compNumIndices));
 				AIGoodResponses.add(new IndexBall(numSticks, AIResponse));
 				System.out.println("AI selects " + AIResponse);
 				numSticks-=AIResponse;
 			}
 			counter++;
 		}
-		if ((((counter + 1) % 2) + 1) == 1) {
-			IndexBall randGoodResponse1 = AIGoodResponses.get((int) (Math.random()*AIGoodResponses.size()-1));
-			IndexBall randGoodResponse2 = AIGoodResponses.get((int) (Math.random()*AIGoodResponses.size()-1));
+		if ((((counter + 1) % 2) + 1) == 1) { //if AI wins
+			IndexBall randGoodResponse1 = AIGoodResponses.get((int) (Math.random()*AIGoodResponses.size()));
+			IndexBall randGoodResponse2 = AIGoodResponses.get((int) (Math.random()*AIGoodResponses.size()));
 			computerHats.get(randGoodResponse1.getIndex()).add(randGoodResponse1.getBall());
 			computerHats.get(randGoodResponse2.getIndex()).add(randGoodResponse2.getBall());
 			System.out.println("You lose.");
@@ -78,7 +79,7 @@ public class GameOfSticks {
 	
 	static void playAgain(Scanner scan) {
 		System.out.println("Would you like to play again? (Y or N)");
-		System.out.println("If playing the AI version, it will get better as it learns!");
+		//System.out.println("If playing the AI version, it will get better as it learns!");
 		String repeat = scan.next();
 		if (repeat.equals("Y")) {
 			AIVSPlayer();
@@ -86,6 +87,7 @@ public class GameOfSticks {
 	}
 	
 	static void printSticks(int numSticks) {
+		System.out.println();
 		if (numSticks == 1) {
 			System.out.println("There is 1 stick on the board.");
 		}
