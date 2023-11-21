@@ -6,6 +6,10 @@ public class GameOfSticks {
 		System.out.println("Welcome to the Game of Sticks! \n");
 		System.out.println("How many sticks are on the table initially? (10-100)?");
 		int numSticks = scan.nextInt();
+		while (numSticks < 10 || numSticks > 100) {
+			System.out.println("Invalid Move! Try again.");
+			numSticks = scan.nextInt();
+		}
 		int counter = 0;
 		while (numSticks > 0) {
 			if (numSticks == 1) {
@@ -29,12 +33,7 @@ public class GameOfSticks {
 			
 			counter++;
 		}
-		if ((counter % 2) == 0) {
-			System.out.println("Player 2, you lose.");
-		}
-		else {
-			System.out.println("Player 1, you lose.");
-		}
+		System.out.println("Player " + (((counter + 1) % 2) + 1) + ", you lose.");
 	}
 
 }
