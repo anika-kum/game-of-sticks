@@ -1,0 +1,44 @@
+import java.util.*;
+public class GameOfSticks {
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Welcome to the Game of Sticks! \n");
+		System.out.println("How many sticks are on the table initially? (10-100)?");
+		int numSticks = scan.nextInt();
+		int counter = 0;
+		while (numSticks > 0) {
+			if (numSticks == 1) {
+				System.out.println("There is 1 stick on the board.");
+			}
+			else {
+				System.out.println("There are " + numSticks + " sticks on the board.");
+			}
+			
+			if (counter % 2 == 0) {
+				System.out.println("Player 1: How many sticks do you take (1-3)?");
+			}
+			else {
+				System.out.println("Player 2: How many sticks do you take (1-3)?");
+			}
+			
+			int response = scan.nextInt();
+			
+			if ((numSticks-response)>=0 && (response <= 3) && (response >= 1)) {
+				numSticks-=response;
+			}
+			else {
+				System.out.println("Invalid Move! Try again.");
+			}
+			
+			counter++;
+		}
+		if ((counter % 2) == 0) {
+			System.out.println("Player 2, you lose.");
+		}
+		else {
+			System.out.println("Player 1, you lose.");
+		}
+	}
+
+}
