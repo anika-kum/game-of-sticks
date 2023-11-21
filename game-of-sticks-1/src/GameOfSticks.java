@@ -14,13 +14,9 @@ public class GameOfSticks {
 			else {
 				System.out.println("There are " + numSticks + " sticks on the board.");
 			}
+		
+			System.out.println("Player " + ((counter % 2) + 1) + " How many sticks do you take (1-3)?");
 			
-			if (counter % 2 == 0) {
-				System.out.println("Player 1: How many sticks do you take (1-3)?");
-			}
-			else {
-				System.out.println("Player 2: How many sticks do you take (1-3)?");
-			}
 			
 			int response = scan.nextInt();
 			
