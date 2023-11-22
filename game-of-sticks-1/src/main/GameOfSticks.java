@@ -230,9 +230,10 @@ public class GameOfSticks {
 		return numSticks;
 	}
 	static void options(Scanner scan) {
-		System.out.println("Options");
+		System.out.println("\nOptions");
 		System.out.println("Play against a friend (1)\n" + "Play against the computer (2)\n" + "Play against the trained computer (3)");
-		System.out.println("Which option do you take (1-3)?");
+		System.out.println("Get instructions on how to play (4)");
+		System.out.println("Which option do you take (1-4)?");
 		int option = scan.nextInt();
 		if (option == 1) {
 			playerVSPlayer();
@@ -242,6 +243,16 @@ public class GameOfSticks {
 		}
 		else if (option == 3) {
 			trainedAIVSPlayer();
+		}
+		else if (option == 4) {
+			System.out.println("\nIn the game of sticks there is a heap of sticks on a board.");
+			System.out.println("On their turn, each player picks up 1 to 3 sticks.");
+			System.out.println("The one who has to pick the final stick will be the loser.\n");
+			System.out.println("Would you like to see the options again? (Y or N)");
+			String options = scan.next();
+			if (options.equals("Y") || options.equals("y")) {
+				options(scan);
+			}
 		}
 		else {
 			System.out.println("Invalid option! Try again.");
@@ -258,9 +269,17 @@ public class GameOfSticks {
 			AIVSPlayer(computerHats, AIResponses);
 		}
 		else if (option == 3) {
-			System.out.println("Training AI, please wait...");
-			System.out.println();
 			trainedAIVSPlayer();
+		}
+		else if (option == 4) {
+			System.out.println("\nIn the game of sticks there is a heap of sticks on a board.");
+			System.out.println("On their turn, each player picks up 1 to 3 sticks.");
+			System.out.println("The one who has to pick the final stick will be the loser.\n");
+			System.out.println("Would you like to see the options again? (Y or N)");
+			String options = scan.next();
+			if (options.equals("Y") || options.equals("y")) {
+				options(scan);
+			}
 		}
 		else {
 			System.out.println("Invalid option! Try again.");
