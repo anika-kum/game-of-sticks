@@ -210,12 +210,11 @@ public class GameOfSticks {
 		else if (numSticks == 3) {
 			return 2;
 		}
-
 		else if (numSticks == 4) {
 			return 3;
 		}
 		else if (numSticks == 5) {
-			return (int)(Math.random()) + 1;
+			return 2;
 		}
 		else {
 			return AIResponse;
