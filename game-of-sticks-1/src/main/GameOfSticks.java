@@ -97,7 +97,7 @@ public class GameOfSticks {
 			trainedComputerHats2.get(i).add(2);
 			trainedComputerHats2.get(i).add(3);
 		}
-		for (int iteration = 0; iteration < 100000; iteration++) {
+		for (int iteration = 0; iteration < 1000000; iteration++) {
 			int numSticks = (int) (Math.random()*90+10);
 			int counter = 0;
 			while (numSticks > 0) {
