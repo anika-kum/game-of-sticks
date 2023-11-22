@@ -7,7 +7,8 @@ public class GameOfSticks {
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Game of Sticks! \n");
-		AIVSPlayer();
+		options(new Scanner(System.in));
+		//AIVSPlayer();
 	}
 	
 	static void playerVSPlayer() {
@@ -79,9 +80,9 @@ public class GameOfSticks {
 	
 	static void playAgain(Scanner scan) {
 		System.out.println("Would you like to play again? (Y or N)");
-		//System.out.println("If playing the AI version, it will get better as it learns!");
+		System.out.println("If playing the AI version, it will get better as it learns!");
 		String repeat = scan.next();
-		if (repeat.equals("Y")) {
+		if (repeat.equals("Y") || repeat.equals("y")) {
 			AIVSPlayer();
 		}
 	}
@@ -111,4 +112,16 @@ public class GameOfSticks {
 		}
 		return numSticks;
 	}
+	static void options(Scanner scan) {
+		System.out.println("Options");
+		System.out.println("Play against a friend (1)\n" + "Play against the computer (2)");
+		System.out.println("Which option do you take (1-2)?");
+		int option = scan.nextInt();
+		if (option == 1) {
+			playerVSPlayer();
+		}
+		else {
+			AIVSPlayer();
+		}
+;	}
 }
