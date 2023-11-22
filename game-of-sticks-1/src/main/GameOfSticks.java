@@ -8,10 +8,11 @@ public class GameOfSticks {
 	private static ArrayList<IndexBall> AIResponses1 = new ArrayList<IndexBall>(); //for trained model
 	private static ArrayList<ArrayList<Integer>> trainedComputerHats2 = new ArrayList<ArrayList<Integer>>(); //for trained model
 	private static ArrayList<IndexBall> AIResponses2 = new ArrayList<IndexBall>(); //for trained model
+	private static int iterations = 1000000; //to train AIs
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Game of Sticks! \n");
-		options(new Scanner(System.in));
+		options(new Scanner(System.in), true);
 		//AIVSAI();
 	}
 	
@@ -33,7 +34,7 @@ public class GameOfSticks {
 		playAgain(scan);
 	}
 	
-	static void AIVSPlayer(ArrayList<ArrayList<Integer>> computerHats, ArrayList<IndexBall> AIResponses) {
+	static void AIVSPlayer(ArrayList<ArrayList<Integer>> computerHats, ArrayList<IndexBall> AIResponses, boolean untrained) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("How many sticks are on the table initially? (10-100)?");
 		int numSticks = scan.nextInt();
@@ -74,12 +75,12 @@ public class GameOfSticks {
 			computerHats.get(randGoodResponse1.getIndex()).add(randGoodResponse1.getBall());
 			computerHats.get(randGoodResponse2.getIndex()).add(randGoodResponse2.getBall());
 			System.out.println("You lose.");
-			playAgainAI(scan, true);
+			playAgainAI(scan, untrained);
 		}
 		else {
 			AIResponses = new ArrayList<IndexBall>(); 
 			System.out.println("AI loses.");
-			playAgainAI(scan, true);
+			playAgainAI(scan, untrained);
 		}
 	}
 	
@@ -97,7 +98,15 @@ public class GameOfSticks {
 			trainedComputerHats2.get(i).add(2);
 			trainedComputerHats2.get(i).add(3);
 		}
-		for (int iteration = 0; iteration < 1000000; iteration++) {
+		for (int iteration = 0; iteration < iterations; iteration++) {
+			if (iteration == (iterations/2)) {
+				System.out.println("Halfway there...");
+				System.out.println();
+			}
+			else if (iteration == 3*(iterations/4)) {
+				System.out.println("Spinning wheels...");
+				System.out.println();
+			}
 			int numSticks = (int) (Math.random()*90+10);
 			int counter = 0;
 			while (numSticks > 0) {
@@ -132,8 +141,12 @@ public class GameOfSticks {
 		}
 	}
 	
-	static void trainedAIVSPlayer() {
-		AIVSAI();
+	static void trainedAIVSPlayer(boolean untrained) {
+		if (untrained) {
+			System.out.println("Training AI, please wait...");
+			System.out.println();
+			AIVSAI();
+		}
 		//checking which model has won more based on size of Hats
 		int counter1 = 0; int counter2 = 0;
 		for (int i=0; i<100; i++) {
@@ -141,19 +154,18 @@ public class GameOfSticks {
 			counter2 += (trainedComputerHats2.get(i).size());
 		}
 		if (counter1 >= counter2) {
-			AIVSPlayer(trainedComputerHats1, AIResponses1);
+			AIVSPlayer(trainedComputerHats1, AIResponses1, false);
 		}
 		else {
-			AIVSPlayer(trainedComputerHats2, AIResponses2);
+			AIVSPlayer(trainedComputerHats2, AIResponses2, false);
 		}
-		playAgainAI(new Scanner(System.in), false);
 	}
 	
 	static void playAgain(Scanner scan) {
 		System.out.println("Would you like to play again? (Y or N)");
 		String repeat = scan.next();
 		if (repeat.equals("Y") || repeat.equals("y")) {
-			playerVSPlayer();
+			options(scan, true);
 		}
 	}
 	
@@ -163,11 +175,8 @@ public class GameOfSticks {
 			System.out.println("The AI will get better as it learns!");
 		}
 		String repeat = scan.next();
-		if (untrained == true && (repeat.equals("Y") || repeat.equals("y"))) {
-			AIVSPlayer(computerHats, AIResponses);
-		}
-		else {
-			trainedAIVSPlayer();
+		if (repeat.equals("Y") || repeat.equals("y")) {
+			options(scan,  untrained);
 		}
 	}
 	
@@ -199,6 +208,13 @@ public class GameOfSticks {
 		else if (numSticks == 3) {
 			return 2;
 		}
+
+		else if (numSticks == 4) {
+			return 3;
+		}
+		else if (numSticks == 5) {
+			return (int)(Math.random()) + 1;
+		}
 		else {
 			return AIResponse;
 		}
@@ -211,7 +227,7 @@ public class GameOfSticks {
 		}
 		return numSticks;
 	}
-	static void options(Scanner scan) {
+	static void options(Scanner scan, boolean untrained) {
 		System.out.println("Options");
 		System.out.println("Play against a friend (1)\n" + "Play against the computer (2)\n" + "Play against the trained computer (3)");
 		System.out.println("Which option do you take (1-3)?");
@@ -220,12 +236,10 @@ public class GameOfSticks {
 			playerVSPlayer();
 		}
 		else if (option == 2) {
-			AIVSPlayer(computerHats, AIResponses);
+			AIVSPlayer(computerHats, AIResponses, true);
 		}
 		else if (option == 3) {
-			System.out.println("Training AI, please wait...");
-			System.out.println();
-			trainedAIVSPlayer();
+			trainedAIVSPlayer(untrained);
 		}
 		else {
 			System.out.println("Invalid option! Try again.");
@@ -239,12 +253,12 @@ public class GameOfSticks {
 			playerVSPlayer();
 		}
 		else if (option == 2) {
-			AIVSPlayer(computerHats, AIResponses);
+			AIVSPlayer(computerHats, AIResponses, true);
 		}
 		else if (option == 3) {
 			System.out.println("Training AI, please wait...");
 			System.out.println();
-			trainedAIVSPlayer();
+			trainedAIVSPlayer(false);
 		}
 		else {
 			System.out.println("Invalid option! Try again.");
