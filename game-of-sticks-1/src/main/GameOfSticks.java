@@ -13,9 +13,6 @@ public class GameOfSticks {
 		System.out.println("Welcome to the Game of Sticks! \n");
 		//options(new Scanner(System.in));
 		AIVSAI();
-		for (int i=0; i<trainedComputerHats1.size(); i++) {
-			System.out.println("Index: " + i + " Balls:" + trainedComputerHats1.get(i));
-		}
 	}
 	
 	static void playerVSPlayer() {
@@ -36,7 +33,7 @@ public class GameOfSticks {
 		playAgain(scan);
 	}
 	
-	static void AIVSPlayer() {
+	static void AIVSPlayer(ArrayList<ArrayList<Integer>> computerHats, ArrayList<IndexBall> AIResponses) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("How many sticks are on the table initially? (10-100)?");
 		int numSticks = scan.nextInt();
@@ -136,7 +133,19 @@ public class GameOfSticks {
 	}
 	
 	static void trainedAIVSPlayer() {
-		
+		AIVSAI();
+		//checking which model has won more based on size of Hats
+		int counter1 = 0; int counter2 = 0;
+		for (int i=0; i<100; i++) {
+			counter1 += (trainedComputerHats1.get(i).size());
+			counter2 += (trainedComputerHats2.get(i).size());
+		}
+		if (counter1 >= counter2) {
+			AIVSPlayer(trainedComputerHats1, AIResponses1);
+		}
+		else {
+			AIVSPlayer(trainedComputerHats2, AIResponses2);
+		}
 	}
 	
 	static void playAgain(Scanner scan) {
@@ -144,7 +153,7 @@ public class GameOfSticks {
 		System.out.println("If playing the AI version, it will get better as it learns!");
 		String repeat = scan.next();
 		if (repeat.equals("Y") || repeat.equals("y")) {
-			AIVSPlayer();
+			AIVSPlayer(computerHats, AIResponses);
 		}
 	}
 	
