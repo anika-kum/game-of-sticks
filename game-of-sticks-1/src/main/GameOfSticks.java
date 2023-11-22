@@ -11,8 +11,8 @@ public class GameOfSticks {
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Game of Sticks! \n");
-		//options(new Scanner(System.in));
-		AIVSAI();
+		options(new Scanner(System.in));
+		//AIVSAI();
 	}
 	
 	static void playerVSPlayer() {
@@ -74,12 +74,12 @@ public class GameOfSticks {
 			computerHats.get(randGoodResponse1.getIndex()).add(randGoodResponse1.getBall());
 			computerHats.get(randGoodResponse2.getIndex()).add(randGoodResponse2.getBall());
 			System.out.println("You lose.");
-			playAgain(scan);
+			playAgainAI(scan, true);
 		}
 		else {
 			AIResponses = new ArrayList<IndexBall>(); 
 			System.out.println("AI loses.");
-			playAgain(scan);
+			playAgainAI(scan, true);
 		}
 	}
 	
@@ -146,14 +146,28 @@ public class GameOfSticks {
 		else {
 			AIVSPlayer(trainedComputerHats2, AIResponses2);
 		}
+		playAgainAI(new Scanner(System.in), false);
 	}
 	
 	static void playAgain(Scanner scan) {
 		System.out.println("Would you like to play again? (Y or N)");
-		System.out.println("If playing the AI version, it will get better as it learns!");
 		String repeat = scan.next();
 		if (repeat.equals("Y") || repeat.equals("y")) {
+			playerVSPlayer();
+		}
+	}
+	
+	static void playAgainAI(Scanner scan, boolean untrained) {
+		System.out.println("Would you like to play again? (Y or N)");
+		if (untrained == true) {
+			System.out.println("The AI will get better as it learns!");
+		}
+		String repeat = scan.next();
+		if (untrained == true && (repeat.equals("Y") || repeat.equals("y"))) {
 			AIVSPlayer(computerHats, AIResponses);
+		}
+		else {
+			trainedAIVSPlayer();
 		}
 	}
 	
@@ -206,7 +220,7 @@ public class GameOfSticks {
 			playerVSPlayer();
 		}
 		else if (option == 2) {
-			AIVSPlayer();
+			AIVSPlayer(computerHats, AIResponses);
 		}
 		else if (option == 3) {
 			System.out.println("Training AI, please wait...");
@@ -225,7 +239,7 @@ public class GameOfSticks {
 			playerVSPlayer();
 		}
 		else if (option == 2) {
-			AIVSPlayer();
+			AIVSPlayer(computerHats, AIResponses);
 		}
 		else if (option == 3) {
 			System.out.println("Training AI, please wait...");
