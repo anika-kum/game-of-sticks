@@ -11,7 +11,11 @@ public class GameOfSticks {
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to the Game of Sticks! \n");
-		options(new Scanner(System.in));
+		//options(new Scanner(System.in));
+		AIVSAI();
+		for (int i=0; i<trainedComputerHats1.size(); i++) {
+			System.out.println("Index: " + i + " Balls:" + trainedComputerHats1.get(i));
+		}
 	}
 	
 	static void playerVSPlayer() {
@@ -60,6 +64,7 @@ public class GameOfSticks {
 			else {
 				int compNumIndices = computerHats.get(numSticks-1).size();
 				int AIResponse = computerHats.get(numSticks-1).get((int) (Math.random()*compNumIndices));
+				AIResponse = invalidAIMove(AIResponse, numSticks);
 				AIResponses.add(new IndexBall(numSticks, AIResponse));
 				System.out.println("AI selects " + AIResponse);
 				numSticks-=AIResponse;
@@ -82,14 +87,11 @@ public class GameOfSticks {
 	}
 	
 	static void AIVSAI() {
-		int numSticks = (int) (Math.random()*90+10);
-
-		for (int i=0; i<numSticks; i++) { //filling in initial outer level ArrayList
+		for (int i=0; i<100; i++) { //filling in initial outer level ArrayList
 			trainedComputerHats1.add(new ArrayList<Integer>());
 			trainedComputerHats2.add(new ArrayList<Integer>());
 		}
-		
-		for (int i=0; i<numSticks; i++) { //populating initial balls in inner ArrayList
+		for (int i=0; i<100; i++) { //populating initial balls in inner ArrayList
 			trainedComputerHats1.get(i).add(1);
 			trainedComputerHats1.get(i).add(2);
 			trainedComputerHats1.get(i).add(3);
@@ -98,35 +100,43 @@ public class GameOfSticks {
 			trainedComputerHats2.get(i).add(2);
 			trainedComputerHats2.get(i).add(3);
 		}
+		for (int iteration = 0; iteration < 100000; iteration++) {
+			int numSticks = (int) (Math.random()*90+10);
+			int counter = 0;
+			while (numSticks > 0) {
+				if (counter % 2 == 0) {
+					int compNumIndices1 = trainedComputerHats1.get(numSticks-1).size();
+					int AIResponse1 = trainedComputerHats1.get(numSticks-1).get((int) (Math.random()*compNumIndices1));
+					AIResponse1 = invalidAIMove(AIResponse1, numSticks);
+					AIResponses1.add(new IndexBall(numSticks, AIResponse1));
+					numSticks-=AIResponse1;
+				}
+				else {
+					int compNumIndices2 = trainedComputerHats2.get(numSticks-1).size();
+					int AIResponse2 = trainedComputerHats2.get(numSticks-1).get((int) (Math.random()*compNumIndices2));
+					AIResponse2 = invalidAIMove(AIResponse2, numSticks);
+					AIResponses2.add(new IndexBall(numSticks, AIResponse2));
+					numSticks-=AIResponse2;
+				}
+				counter++;
+			}
+			if ((((counter + 1) % 2) + 1) == 1) { //if AI2 wins
+				IndexBall randGoodResponse1Second = AIResponses2.get((int) (Math.random()*AIResponses2.size()));
+				IndexBall randGoodResponse2Second = AIResponses2.get((int) (Math.random()*AIResponses2.size()));
+				trainedComputerHats1.get(randGoodResponse1Second.getIndex()).add(randGoodResponse1Second.getBall());
+				trainedComputerHats1.get(randGoodResponse2Second.getIndex()).add(randGoodResponse2Second.getBall());
+			}
+			else { //if AI1 wins
+				IndexBall randGoodResponse1First = AIResponses1.get((int) (Math.random()*AIResponses1.size()));
+				IndexBall randGoodResponse2First = AIResponses1.get((int) (Math.random()*AIResponses1.size()));
+				trainedComputerHats1.get(randGoodResponse1First.getIndex()).add(randGoodResponse1First.getBall());
+				trainedComputerHats1.get(randGoodResponse2First.getIndex()).add(randGoodResponse2First.getBall());
+			}
+		}
+	}
+	
+	static void trainedAIVSPlayer() {
 		
-		int counter = 0;
-		while (numSticks > 0) {
-			if (counter % 2 == 0) {
-				int compNumIndices1 = computerHats.get(numSticks-1).size();
-				int AIResponse1 = computerHats.get(numSticks-1).get((int) (Math.random()*compNumIndices1));
-				AIResponses1.add(new IndexBall(numSticks, AIResponse1));
-				numSticks-=AIResponse1;
-			}
-			else {
-				int compNumIndices2 = computerHats.get(numSticks-1).size();
-				int AIResponse2 = computerHats.get(numSticks-1).get((int) (Math.random()*compNumIndices2));
-				AIResponses2.add(new IndexBall(numSticks, AIResponse2));
-				numSticks-=AIResponse2;
-			}
-			counter++;
-		}
-		if ((((counter + 1) % 2) + 1) == 1) { //if AI2 wins
-			IndexBall randGoodResponse1Second = AIResponses2.get((int) (Math.random()*AIResponses2.size()));
-			IndexBall randGoodResponse2Second = AIResponses.get((int) (Math.random()*AIResponses2.size()));
-			trainedComputerHats1.get(randGoodResponse1Second.getIndex()).add(randGoodResponse1Second.getBall());
-			trainedComputerHats1.get(randGoodResponse2Second.getIndex()).add(randGoodResponse2Second.getBall());
-		}
-		else { //if AI1 wins
-			IndexBall randGoodResponse1First = AIResponses1.get((int) (Math.random()*AIResponses1.size()));
-			IndexBall randGoodResponse2First = AIResponses1.get((int) (Math.random()*AIResponses1.size()));
-			trainedComputerHats1.get(randGoodResponse1First.getIndex()).add(randGoodResponse1First.getBall());
-			trainedComputerHats1.get(randGoodResponse2First.getIndex()).add(randGoodResponse2First.getBall());
-		}
 	}
 	
 	static void playAgain(Scanner scan) {
@@ -156,6 +166,21 @@ public class GameOfSticks {
 		return response;
 	}
 	
+	static int invalidAIMove(int AIResponse, int numSticks) {
+		if (numSticks == 1) {
+			return 1;
+		}
+		else if (numSticks == 2) {
+			return 1;
+		}
+		else if (numSticks == 3) {
+			return 2;
+		}
+		else {
+			return AIResponse;
+		}
+	}
+	
 	static int invalidNumSticks(int numSticks, Scanner scan) {
 		while (numSticks < 10 || numSticks > 100) {
 			System.out.println("Invalid number of sticks! Try again.");
@@ -165,14 +190,42 @@ public class GameOfSticks {
 	}
 	static void options(Scanner scan) {
 		System.out.println("Options");
-		System.out.println("Play against a friend (1)\n" + "Play against the computer (2)");
-		System.out.println("Which option do you take (1-2)?");
+		System.out.println("Play against a friend (1)\n" + "Play against the computer (2)\n" + "Play against the trained computer (3)");
+		System.out.println("Which option do you take (1-3)?");
 		int option = scan.nextInt();
 		if (option == 1) {
 			playerVSPlayer();
 		}
-		else {
+		else if (option == 2) {
 			AIVSPlayer();
 		}
+		else if (option == 3) {
+			System.out.println("Training AI, please wait...");
+			System.out.println();
+			trainedAIVSPlayer();
+		}
+		else {
+			System.out.println("Invalid option! Try again.");
+			invalidOptions(scan);
+		} 
 ;	}
+	
+	static void invalidOptions(Scanner scan) {
+		int option = scan.nextInt();
+		if (option == 1) {
+			playerVSPlayer();
+		}
+		else if (option == 2) {
+			AIVSPlayer();
+		}
+		else if (option == 3) {
+			System.out.println("Training AI, please wait...");
+			System.out.println();
+			trainedAIVSPlayer();
+		}
+		else {
+			System.out.println("Invalid option! Try again.");
+			invalidOptions(scan);
+		} 
+	}
 }

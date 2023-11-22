@@ -13,4 +13,8 @@ public class IndexBall {
 	public int getBall() {
 		return ball;
 	}
+	public String print() {
+		String output = "(" + index + ", " + ball + ")";
+		return output;
+	}
 }
