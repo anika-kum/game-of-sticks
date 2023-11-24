@@ -4,6 +4,7 @@ public class GameOfSticks {
 	
 	private static ArrayList<ArrayList<Integer>> computerHats = new ArrayList<ArrayList<Integer>>(); //each hat has balls in it numbered 1-3
 	private static ArrayList<IndexBall> AIResponses = new ArrayList<IndexBall>();
+	private static ArrayList<IndexBall> playerResponses = new ArrayList<IndexBall>(); //for AI to learn from player
 	private static ArrayList<ArrayList<Integer>> trainedComputerHats1 = new ArrayList<ArrayList<Integer>>(); //for trained model
 	private static ArrayList<IndexBall> AIResponses1 = new ArrayList<IndexBall>(); //for trained model
 	private static ArrayList<ArrayList<Integer>> trainedComputerHats2 = new ArrayList<ArrayList<Integer>>(); //for trained model
@@ -58,6 +59,7 @@ public class GameOfSticks {
 			if (counter % 2 == 0) {
 				System.out.println("Player 1: How many sticks do you take (1-3)?");
 				int response = scan.nextInt();
+				playerResponses.add(new IndexBall(numSticks, invalidMove(response, numSticks, scan)));
 				numSticks -= invalidMove(response, numSticks, scan);
 			}
 			else {
@@ -78,7 +80,11 @@ public class GameOfSticks {
 			System.out.println("You lose.");
 			playAgainAI(scan);
 		}
-		else {
+		else { //if player wins, AI learns from player!
+			IndexBall playerRandGoodResponse1 = playerResponses.get((int) (Math.random()*playerResponses.size()));
+			IndexBall playerRandGoodResponse2 = playerResponses.get((int) (Math.random()*playerResponses.size()));
+			computerHats.get(playerRandGoodResponse1.getIndex()).add(playerRandGoodResponse1.getBall());
+			computerHats.get(playerRandGoodResponse2.getIndex()).add(playerRandGoodResponse2.getBall());
 			AIResponses = new ArrayList<IndexBall>(); 
 			System.out.println("AI loses.");
 			playAgainAI(scan);
